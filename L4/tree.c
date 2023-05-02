@@ -22,8 +22,8 @@ void addCharacter(Node* current_node) {
     Node* old_ch_node = newNode(current_node->name, current_node->index * 2);
     new_question->yes = new_ch_node;
     new_question->no = old_ch_node;
-    free(current_node);
     *current_node = *new_question;
+    free(current_node);
 }
 void traverseTree(Node* current_node, FILE* log_file) {
     if (current_node->yes == NULL && current_node->no == NULL) {
