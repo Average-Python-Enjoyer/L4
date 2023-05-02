@@ -21,5 +21,5 @@ int getMaxIndex(Node* current_node);
 void saveTree(FILE* file, Node* current_node, int max_index);
 Node* loadTree(FILE* file, int index);
 void free_tree(Node* root);
-void log_action(FILE* log_file, const char* action);
+void log_action(FILE* log_file, const char* message);
 #endif //INC_5_1_FUNCTIONS_H

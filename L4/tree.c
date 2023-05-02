@@ -1,6 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include "tree.h"
-Node* newNode(char* name, int index) {
+Node* newNode(const char* name, int index) {
     Node* node = malloc(sizeof(Node));
     strncpy(node->name, name, MAX_NAME_LENGTH);
     node->index = index;
@@ -22,6 +22,7 @@ void addCharacter(Node* current_node) {
     Node* old_ch_node = newNode(current_node->name, current_node->index * 2);
     new_question->yes = new_ch_node;
     new_question->no = old_ch_node;
+    free(current_node);
     *current_node = *new_question;
 }
 void traverseTree(Node* current_node, FILE* log_file) {
@@ -95,23 +96,14 @@ Node* loadTree(FILE* file, int index) {
     }
     return NULL;
 }
-void log_action(FILE* log_file, const char* format, ...) {
+void log_action(FILE* log_file, const char* message) {
     time_t rawtime;
     struct tm* timeinfo;
     char buffer[80];
-
     time(&rawtime);
-    timeinfo = localtime(&rawtime);
-
+    timeinfo = localtime_r(&rawtime);
     strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
-    fprintf(log_file, "[%s] ", buffer);
-
-    va_list args;
-    va_start(args, format);
-    vfprintf(log_file, format, args);
-    va_end(args);
-
-    fprintf(log_file, "\n");
+    fprintf(log_file, "[%s] %s\n", buffer, message);
 }
 void free_tree(Node* root) {
     if (root == NULL) return;
