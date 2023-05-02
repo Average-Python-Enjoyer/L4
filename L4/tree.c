@@ -28,7 +28,6 @@ void addCharacter(Node* current_node) {
 void traverseTree(Node* current_node, FILE* log_file) {
     if (current_node->yes == NULL && current_node->no == NULL) {
         printf("\033[0;37mI think it's\033[0;36m %s.\033[0m\n", current_node->name);
-        log_action(log_file, "Program output: I think it's %s.", current_node->name);
         char command[MAX_NAME_LENGTH + 50];
         char search_query[MAX_NAME_LENGTH];
         strncpy(search_query, current_node->name, MAX_NAME_LENGTH);
@@ -39,13 +38,10 @@ void traverseTree(Node* current_node, FILE* log_file) {
         sprintf(command, "start https://www.bing.com/images/search?q=%s", search_query);
         system(command);
         printf("\033[0;37mDid I guess correctly? \033[0;32m(yes/no) \033[0m");
-        log_action(log_file, "Program output: Did I guess correctly? (yes/no)");
         char answer[MAX_NAME_LENGTH];
         fgets(answer, MAX_NAME_LENGTH, stdin);
-        log_action(log_file, "User input: %s", answer);
         if (strncmp(answer, "yes", 2) == 0) {
             printf("\033[0;32mI won!\033[0m\n");
-            log_action(log_file, "Program output: I won!");
         }
         else {
             //printf("\033[0;31mFail!\033[0m\n");
@@ -54,10 +50,8 @@ void traverseTree(Node* current_node, FILE* log_file) {
         return;
     }
     printf("\033[0;37m%s \033[0;32m(yes/no) \033[0m", current_node->name);
-    log_action(log_file, "Program output: %s (yes/no)", current_node->name);
     char answer[MAX_NAME_LENGTH];
     fgets(answer, MAX_NAME_LENGTH, stdin);
-    log_action(log_file, "User input: %s", answer);
     if (strncmp(answer, "yes", 2) == 0) {
         traverseTree(current_node->yes, log_file);
     }
@@ -95,15 +89,6 @@ Node* loadTree(FILE* file, int index) {
         }
     }
     return NULL;
-}
-void log_action(FILE* log_file, const char* message) {
-    time_t rawtime;
-    struct tm* timeinfo;
-    char buffer[80];
-    time(&rawtime);
-    timeinfo = localtime_r(&rawtime);
-    strftime(buffer, sizeof(buffer), "%d-%m-%Y %H:%M:%S", timeinfo);
-    fprintf(log_file, "[%s] %s\n", buffer, message);
 }
 void free_tree(Node* root) {
     if (root == NULL) return;
